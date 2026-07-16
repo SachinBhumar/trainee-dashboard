@@ -28,20 +28,9 @@ def create_invite(payload: schemas.InviteCreate, request: Request, db: Session =
         role=payload.role.lower()
     )
     
-    # Try to determine the frontend base URL dynamically from Origin or Referer headers,
-    # falling back to the FRONTEND_URL environment variable if not present.
-    origin = request.headers.get("origin")
-    referer = request.headers.get("referer")
-    
-    if origin:
-        frontend_base = origin
-    elif referer:
-        parsed_ref = urlparse(referer)
-        frontend_base = f"{parsed_ref.scheme}://{parsed_ref.netloc}"
-    else:
-        frontend_base = FRONTEND_URL
-        
-    invite_url = f"{frontend_base}/register?token={token}"
+    # Always use the configured production FRONTEND_URL for generated invite links
+    # to ensure they use the main stable domain.
+    invite_url = f"{FRONTEND_URL}/register?token={token}"
     return {
         "email": invite.email,
         "token": invite.token,
