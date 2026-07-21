@@ -472,32 +472,58 @@
 }
 
 /* Custom Dropdown Filters */
-.select-filter {
-  padding: 6px 32px 6px 14px;
-  border-radius: 6px;
+.unified-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.select-calendar-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--primary);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.select-filter-unified {
+  padding: 7px 34px 7px 34px;
+  border-radius: 8px;
   border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
   font-size: 0.85rem;
   font-weight: 700;
-  background-color: var(--card-bg);
+  color: var(--secondary);
   cursor: pointer;
+  outline: none;
+  transition: var(--transition);
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234a5568' stroke-width='3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 10px center;
-  background-size: 10px;
-  transition: var(--transition);
+  background-size: 11px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-.select-filter:focus {
-  outline: none;
+.select-filter-unified:hover,
+.select-filter-unified:focus {
   border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(165, 21, 38, 0.1);
 }
 
-.select-filter-month {
-  background-color: transparent;
-  border-color: transparent;
+.select-filter-unified optgroup {
+  font-weight: 700;
+  color: var(--primary);
+  background: #f8f9fa;
+  padding: 4px 0;
+}
+
+.select-filter-unified option {
+  font-weight: 500;
   color: var(--secondary);
-  font-size: 0.95rem;
+  background: #ffffff;
+  padding: 6px 12px;
+}
   padding-left: 0;
 }
 
