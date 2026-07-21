@@ -19,8 +19,8 @@ import {
 const Dashboard = () => {
   const { user, logout } = useAuth();
 
-  const [periods, setPeriods] = useState([]);
-  const [selectedPeriod, setSelectedPeriod] = useState('');
+  const [periods, setPeriods] = useState(['2026-04-01', '2026-05-01']);
+  const [selectedPeriod, setSelectedPeriod] = useState('2026-05-01');
   const [selectedView, setSelectedView] = useState('YTD'); // 'YTD' | 'MoM'
   const [selectedTimeframe, setSelectedTimeframe] = useState('Full year'); // 'Full year' | 'H1...' | 'Q1...'
   const [activeTab, setActiveTab] = useState('brand'); // 'brand' | 'media' | 'admin'

@@ -104,10 +104,10 @@ const filterDataByTimeframe = (dataArray, timeframe) => {
   return dataArray;
 };
 
-const MediaMetrics = ({ data, timeframe = 'Full year' }) => {
-  if (!data) return <p>Loading Media Metrics...</p>;
-
-  const { paid_search_trend, web_traffic_trend } = data;
+const MediaMetrics = ({ data = {}, timeframe = 'Full year' }) => {
+  const safeData = data || {};
+  const paid_search_trend = safeData.paid_search_trend || [];
+  const web_traffic_trend = safeData.web_traffic_trend || [];
 
   const FISCAL_MEDIA_MONTHS = [
     { month: 'Apr', ap: 4160000, op: 1850000, web: 41700000 },
