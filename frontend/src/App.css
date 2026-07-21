@@ -524,8 +524,6 @@
   background: #ffffff;
   padding: 6px 12px;
 }
-  padding-left: 0;
-}
 
 .select-filter-month:hover {
   color: var(--primary);
