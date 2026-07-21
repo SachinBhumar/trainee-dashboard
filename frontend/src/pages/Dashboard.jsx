@@ -24,11 +24,32 @@ const Dashboard = () => {
   const [selectedView, setSelectedView] = useState('YTD'); // 'YTD' | 'MoM'
   const [selectedTimeframe, setSelectedTimeframe] = useState('Full year'); // 'Full year' | 'H1...' | 'Q1...'
   const [activeTab, setActiveTab] = useState('brand'); // 'brand' | 'media' | 'admin'
-  const [kpiData, setKpiData] = useState(null);
-  const [brandData, setBrandData] = useState(null);
-  const [mediaData, setMediaData] = useState(null);
+  const defaultKpiData = {
+    brand: {
+      share_of_search: { title: "Share of Search", value: "74.0%", subtext: "82.6% YTD Avg", source: "Google Dashboard" },
+      toma: { title: "TOMA", value: "81.0%", subtext: "+10.0pp vs base 71% (YTD)", source: "Kantar" },
+      consideration: { title: "Consideration", value: "82.0%", subtext: "-11.0pp vs base 93% (YTD)", source: "Kantar" },
+      mmr_reach: { title: "MMR Reach", value: "743Mn", subtext: "Period max (894.0Mn base)", source: "BARC + Madison Tool" },
+      tv_sov: { title: "TV SOV", value: "53.5%", subtext: "+14.5pp vs target 39% (YTD)", source: "BARC" },
+      digital_sov: { title: "Digital SOV", value: "43.2%", subtext: "Period level (YTD)", source: "Vtion" },
+      paid_search_sos: { title: "Paid Search SOS", value: "93.5%", subtext: "+3.5pp vs target (YTD)", source: "SimilarWeb" },
+      ai_sos: { title: "AI SOS", value: "82.4%", subtext: "+2.4pp vs base (YTD)", source: "SimilarWeb" }
+    },
+    media: {
+      all_platform_soe: { title: "All Platform SOE", value: "34%", subtext: "+4.0pp vs target (YTD)", source: "Madison Competes" },
+      digital_soe_yt: { title: "Digital SOE (YT)", value: "35.5%", subtext: "Period level (YTD)", source: "Google Platforms" },
+      avg_frequency: { title: "Avg Frequency", value: "13-16x", subtext: "Period range (YTD)", source: "MSpectra" },
+      website_traffic: { title: "Website Traffic", value: "41.7M", subtext: "Total visits (YTD)", source: "SimilarWeb" },
+      paid_search_traffic: { title: "Paid Search Traffic", value: "4.16Mn", subtext: "vs Birla Opus 1.85Mn (YTD)", source: "SimilarWeb" },
+      one_pd_reach: { title: "1PD Reach", value: "12.5Mn", subtext: "Activated audience (YTD)", source: "CDP / CRM" }
+    }
+  };
+
+  const [kpiData, setKpiData] = useState(defaultKpiData);
+  const [brandData, setBrandData] = useState({});
+  const [mediaData, setMediaData] = useState({});
   const [pptDownloading, setPptDownloading] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const menuRef = useRef(null);

@@ -388,7 +388,10 @@ def get_brand_metrics(db: Session = Depends(get_db), period: str = Query("2026-0
             {"market": "All India", "value": "76.0%", "vs_target": "+1.0pp", "tv_sov": "30%", "base": "74.0%", "status": "On track"},
             {"market": "NW", "value": "72.0%", "vs_target": "-3.0pp", "tv_sov": "32%", "base": "75.0%", "status": "Watch"},
             {"market": "WB", "value": "74.0%", "vs_target": "-2.0pp", "tv_sov": "32%", "base": "76.0%", "status": "Watch"},
-            {"market": "TN", "value": "76.0%", "vs_target": "+2.0pp", "tv_sov": "37%", "base": "80.0%", "status": "On track"}
+            {"market": "TN", "value": "76.0%", "vs_target": "+2.0pp", "tv_sov": "37%", "base": "80.0%", "status": "On track"},
+            {"market": "KAR", "value": "78.0%", "vs_target": "+3.0pp", "tv_sov": "37%", "base": "75.0%", "status": "On track"},
+            {"market": "KER", "value": "70.0%", "vs_target": "-1.0pp", "tv_sov": "22%", "base": "71.0%", "status": "Watch"},
+            {"market": "APG", "value": "81.0%", "vs_target": "+5.0pp", "tv_sov": "45%", "base": "76.0%", "status": "On track"}
         ]
         
     return {
