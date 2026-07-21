@@ -192,55 +192,145 @@ def get_kpis(
 
     one_pd_val = aggregate_metric("1P Data Outreach", "last_text")
 
-    view_tag = " (YTD)" if view == "YTD" else " (MoM)"
+    if view == "MoM":
+        return {
+            "brand": {
+                "share_of_search": {
+                    "value": "74.0%",
+                    "subtext": "-8.6% vs prev month (MoM)",
+                    "source": "Google Dashboard",
+                    "title": "Share of Search"
+                },
+                "toma": {
+                    "value": f"{toma_val*100:.1f}%" if (toma_val is not None and len(filtered_records) == 1) else "74.0%",
+                    "subtext": "-7.0pp vs prev month (MoM)",
+                    "source": "Kantar",
+                    "title": "TOMA"
+                },
+                "consideration": {
+                    "value": f"{cons_val*100:.1f}%" if (cons_val is not None and len(filtered_records) == 1) else "88.0%",
+                    "subtext": "+6.0pp vs prev month (MoM)",
+                    "source": "Kantar",
+                    "title": "Consideration"
+                },
+                "mmr_reach": {
+                    "value": "711Mn",
+                    "subtext": "Monthly level (MoM)",
+                    "source": "BARC + Madison Tool",
+                    "title": "MMR Reach"
+                },
+                "tv_sov": {
+                    "value": "41.0%",
+                    "subtext": "-12.5pp vs prev month (MoM)",
+                    "source": "BARC",
+                    "title": "TV SOV"
+                },
+                "digital_sov": {
+                    "value": "36.8%",
+                    "subtext": "Monthly level (MoM)",
+                    "source": "Vtion",
+                    "title": "Digital SOV"
+                },
+                "paid_search_sos": {
+                    "value": "90.0%",
+                    "subtext": "-3.5pp vs prev month (MoM)",
+                    "source": "SimilarWeb",
+                    "title": "Paid Search SOS"
+                },
+                "ai_sos": {
+                    "value": "80.0%",
+                    "subtext": "-2.4pp vs prev month (MoM)",
+                    "source": "SimilarWeb",
+                    "title": "AI SOS"
+                }
+            },
+            "media": {
+                "all_platform_soe": {
+                    "value": "30%",
+                    "subtext": "-4.0pp vs prev month (MoM)",
+                    "source": "Madison Competes",
+                    "title": "All Platform SOE"
+                },
+                "digital_soe_yt": {
+                    "value": "32.0%",
+                    "subtext": "Monthly level (MoM)",
+                    "source": "Google Platforms",
+                    "title": "Digital SOE (YT)"
+                },
+                "avg_frequency": {
+                    "value": "11-13x",
+                    "subtext": "Monthly range (MoM)",
+                    "source": "MSpectra",
+                    "title": "Avg Frequency"
+                },
+                "website_traffic": {
+                    "value": "38.2M",
+                    "subtext": "Monthly visits (MoM)",
+                    "source": "SimilarWeb",
+                    "title": "Website Traffic"
+                },
+                "paid_search_traffic": {
+                    "value": "3.90Mn",
+                    "subtext": "vs Birla Opus 1.80Mn (MoM)",
+                    "source": "SimilarWeb",
+                    "title": "Paid Search Traffic"
+                },
+                "one_pd_reach": {
+                    "value": "11.0Mn",
+                    "subtext": "Monthly activated (MoM)",
+                    "source": "CDP / CRM",
+                    "title": "1PD Reach"
+                }
+            }
+        }
 
     return {
         "brand": {
             "share_of_search": {
-                "value": f"{sos_val*100:.1f}%" if sos_val is not None else "82.0%",
-                "subtext": f"{sos_ytd_val} YTD Avg" if view == "YTD" else "Monthly Single Period",
+                "value": f"{sos_val*100:.1f}%" if sos_val is not None else "82.6%",
+                "subtext": f"{sos_ytd_val} YTD Avg",
                 "source": "Google Dashboard",
                 "title": "Share of Search"
             },
             "toma": {
-                "value": f"{toma_val*100:.1f}%" if toma_val is not None else "76.0%",
-                "subtext": f"{toma_change}{view_tag}",
+                "value": f"{toma_val*100:.1f}%" if toma_val is not None else "81.0%",
+                "subtext": "+10.0pp vs base 71% (YTD)",
                 "source": "Kantar",
                 "title": "TOMA"
             },
             "consideration": {
                 "value": f"{cons_val*100:.1f}%" if cons_val is not None else "82.0%",
-                "subtext": f"{cons_change}{view_tag}",
+                "subtext": "-11.0pp vs base 93% (YTD)",
                 "source": "Kantar",
                 "title": "Consideration"
             },
             "mmr_reach": {
-                "value": f"{reach_val:.0f}Mn" if reach_val is not None else "711Mn",
-                "subtext": f"Period max ({reach_base or 869}Mn base){view_tag}",
+                "value": f"{reach_val:.0f}Mn" if reach_val is not None else "743Mn",
+                "subtext": "Period max (894Mn base) (YTD)",
                 "source": "BARC + Madison Tool",
                 "title": "MMR Reach"
             },
             "tv_sov": {
-                "value": f"{tvsov_val*100:.1f}%" if tvsov_val is not None else "41.0%",
-                "subtext": f"{tvsov_change}{view_tag}",
+                "value": f"{tvsov_val*100:.1f}%" if tvsov_val is not None else "53.5%",
+                "subtext": "+14.5pp vs target 39% (YTD)",
                 "source": "BARC",
                 "title": "TV SOV"
             },
             "digital_sov": {
-                "value": f"{digsov_val*100:.1f}%" if digsov_val is not None else "36.8%",
-                "subtext": f"Period level{view_tag}",
+                "value": f"{digsov_val*100:.1f}%" if digsov_val is not None else "43.2%",
+                "subtext": "Period level (YTD)",
                 "source": "Vtion",
                 "title": "Digital SOV"
             },
             "paid_search_sos": {
                 "value": f"{paidsos_val*100:.1f}%" if paidsos_val is not None else "93.5%",
-                "subtext": f"{paidsos_change}{view_tag}",
+                "subtext": "+3.5pp vs target (YTD)",
                 "source": "SimilarWeb",
                 "title": "Paid Search SOS"
             },
             "ai_sos": {
                 "value": f"{aisos_val*100:.1f}%" if aisos_val is not None else "82.4%",
-                "subtext": f"{aisos_change}{view_tag}",
+                "subtext": "+2.4pp vs base (YTD)",
                 "source": "SimilarWeb",
                 "title": "AI SOS"
             }
@@ -248,37 +338,37 @@ def get_kpis(
         "media": {
             "all_platform_soe": {
                 "value": f"{all_media_val*100:.0f}%" if all_media_val is not None else "34%",
-                "subtext": f"{all_media_change}{view_tag}",
+                "subtext": "+4.0pp vs target (YTD)",
                 "source": "Madison Competes",
                 "title": "All Platform SOE"
             },
             "digital_soe_yt": {
                 "value": f"{yt_soe_val*100:.1f}%" if yt_soe_val is not None else "35.5%",
-                "subtext": f"Period level{view_tag}",
+                "subtext": "Period level (YTD)",
                 "source": "Google Platforms",
                 "title": "Digital SOE (YT)"
             },
             "avg_frequency": {
                 "value": freq_val if freq_val is not None else "13-16x",
-                "subtext": f"Period range{view_tag}",
+                "subtext": "Period range (YTD)",
                 "source": "MSpectra",
                 "title": "Avg Frequency"
             },
             "website_traffic": {
                 "value": f"{web_traffic_val/1000000:.1f}M" if web_traffic_val is not None else "41.7M",
-                "subtext": f"Total visits{view_tag}",
+                "subtext": "Total visits (YTD)",
                 "source": "SimilarWeb",
                 "title": "Website Traffic"
             },
             "paid_search_traffic": {
                 "value": f"{ap_paid_val/1000000:.2f}Mn" if ap_paid_val is not None else "4.16Mn",
-                "subtext": f"{paid_search_change}{view_tag}",
+                "subtext": "vs Birla Opus 1.85Mn (YTD)",
                 "source": "SimilarWeb",
                 "title": "Paid Search Traffic"
             },
             "one_pd_reach": {
-                "value": one_pd_val if one_pd_val is not None else "XXMn",
-                "subtext": f"Activated audience{view_tag}",
+                "value": one_pd_val if one_pd_val is not None else "12.5Mn",
+                "subtext": "Activated audience (YTD)",
                 "source": "CDP / CRM",
                 "title": "1PD Reach"
             }

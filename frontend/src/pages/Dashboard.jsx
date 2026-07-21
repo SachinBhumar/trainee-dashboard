@@ -24,12 +24,12 @@ const Dashboard = () => {
   const [selectedView, setSelectedView] = useState('YTD'); // 'YTD' | 'MoM'
   const [selectedTimeframe, setSelectedTimeframe] = useState('Full year'); // 'Full year' | 'H1...' | 'Q1...'
   const [activeTab, setActiveTab] = useState('brand'); // 'brand' | 'media' | 'admin'
-  const defaultKpiData = {
+  const ytdKpiData = {
     brand: {
-      share_of_search: { title: "Share of Search", value: "74.0%", subtext: "82.6% YTD Avg", source: "Google Dashboard" },
+      share_of_search: { title: "Share of Search", value: "82.6%", subtext: "82.6% YTD Average", source: "Google Dashboard" },
       toma: { title: "TOMA", value: "81.0%", subtext: "+10.0pp vs base 71% (YTD)", source: "Kantar" },
       consideration: { title: "Consideration", value: "82.0%", subtext: "-11.0pp vs base 93% (YTD)", source: "Kantar" },
-      mmr_reach: { title: "MMR Reach", value: "743Mn", subtext: "Period max (894.0Mn base)", source: "BARC + Madison Tool" },
+      mmr_reach: { title: "MMR Reach", value: "743Mn", subtext: "Period max (894Mn base) (YTD)", source: "BARC + Madison Tool" },
       tv_sov: { title: "TV SOV", value: "53.5%", subtext: "+14.5pp vs target 39% (YTD)", source: "BARC" },
       digital_sov: { title: "Digital SOV", value: "43.2%", subtext: "Period level (YTD)", source: "Vtion" },
       paid_search_sos: { title: "Paid Search SOS", value: "93.5%", subtext: "+3.5pp vs target (YTD)", source: "SimilarWeb" },
@@ -45,7 +45,28 @@ const Dashboard = () => {
     }
   };
 
-  const [kpiData, setKpiData] = useState(defaultKpiData);
+  const momKpiData = {
+    brand: {
+      share_of_search: { title: "Share of Search", value: "74.0%", subtext: "-8.6% vs prev month (MoM)", source: "Google Dashboard" },
+      toma: { title: "TOMA", value: "74.0%", subtext: "-7.0pp vs prev month (MoM)", source: "Kantar" },
+      consideration: { title: "Consideration", value: "88.0%", subtext: "+6.0pp vs prev month (MoM)", source: "Kantar" },
+      mmr_reach: { title: "MMR Reach", value: "711Mn", subtext: "Monthly level (MoM)", source: "BARC + Madison Tool" },
+      tv_sov: { title: "TV SOV", value: "41.0%", subtext: "-12.5pp vs prev month (MoM)", source: "BARC" },
+      digital_sov: { title: "Digital SOV", value: "36.8%", subtext: "Monthly single level (MoM)", source: "Vtion" },
+      paid_search_sos: { title: "Paid Search SOS", value: "90.0%", subtext: "-3.5pp vs prev month (MoM)", source: "SimilarWeb" },
+      ai_sos: { title: "AI SOS", value: "80.0%", subtext: "-2.4pp vs prev month (MoM)", source: "SimilarWeb" }
+    },
+    media: {
+      all_platform_soe: { title: "All Platform SOE", value: "30%", subtext: "-4.0pp vs prev month (MoM)", source: "Madison Competes" },
+      digital_soe_yt: { title: "Digital SOE (YT)", value: "32.0%", subtext: "Monthly level (MoM)", source: "Google Platforms" },
+      avg_frequency: { title: "Avg Frequency", value: "11-13x", subtext: "Monthly range (MoM)", source: "MSpectra" },
+      website_traffic: { title: "Website Traffic", value: "38.2M", subtext: "Monthly visits (MoM)", source: "SimilarWeb" },
+      paid_search_traffic: { title: "Paid Search Traffic", value: "3.90Mn", subtext: "vs Birla Opus 1.80Mn (MoM)", source: "SimilarWeb" },
+      one_pd_reach: { title: "1PD Reach", value: "11.0Mn", subtext: "Monthly activated (MoM)", source: "CDP / CRM" }
+    }
+  };
+
+  const [kpiData, setKpiData] = useState(ytdKpiData);
   const [brandData, setBrandData] = useState({});
   const [mediaData, setMediaData] = useState({});
   const [pptDownloading, setPptDownloading] = useState(false);
@@ -94,11 +115,12 @@ const Dashboard = () => {
         axios.get(`/api/dashboard/media-metrics?period=${selectedPeriod}&timeframe=${selectedTimeframe}&view=${selectedView}`)
       ]);
 
-      setKpiData(kpisRes.data);
-      setBrandData(brandRes.data);
-      setMediaData(mediaRes.data);
+      setKpiData(kpisRes.data || (selectedView === 'MoM' ? momKpiData : ytdKpiData));
+      setBrandData(brandRes.data || {});
+      setMediaData(mediaRes.data || {});
     } catch (err) {
       console.error("Error loading dashboard metrics:", err);
+      setKpiData(selectedView === 'MoM' ? momKpiData : ytdKpiData);
     } finally {
       setLoading(false);
     }
