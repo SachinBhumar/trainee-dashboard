@@ -8,13 +8,13 @@
 
 /* Header Styles (Madison Media + Asian Paints Branding) */
 .app-header {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  background: linear-gradient(135deg, #8e0e1e 0%, #640813 100%);
   padding: 0.55rem 1.75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 100;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 14px rgba(100, 8, 19, 0.35);
   color: #ffffff;
 }
 
@@ -34,15 +34,15 @@
   font-family: 'Outfit', sans-serif;
   font-weight: 800;
   font-size: 1rem;
-  color: #ffffff;
-  background: var(--primary);
+  color: var(--primary);
+  background: #ffffff;
   width: 28px;
   height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(165, 21, 38, 0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .ap-text {
@@ -54,13 +54,13 @@
 }
 
 .ap-text span {
-  color: #f87171;
+  color: #fecdd3;
 }
 
 .divider-line {
   height: 22px;
   width: 1px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 .logo-madison {
@@ -70,8 +70,8 @@
 }
 
 .madison-badge {
-  background-color: var(--primary);
-  color: var(--text-white);
+  background-color: #ffffff;
+  color: var(--primary);
   font-weight: 800;
   font-size: 0.85rem;
   width: 24px;
@@ -80,7 +80,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(165, 21, 38, 0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .madison-text {
@@ -95,7 +95,7 @@
   display: block;
   font-size: 0.72rem;
   font-weight: 600;
-  color: #f87171;
+  color: #fecdd3;
 }
 
 .header-title-box {
@@ -113,7 +113,7 @@
 
 .header-title-box p {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.85);
   font-weight: 500;
 }
 
@@ -135,8 +135,8 @@
 }
 
 .menu-toggle-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
   width: 36px;
   height: 36px;
@@ -150,9 +150,10 @@
 
 .menu-toggle-btn:hover,
 .menu-toggle-btn.active {
-  background: var(--primary);
-  color: #ffffff;
-  border-color: var(--primary);
+  background: #ffffff;
+  color: var(--primary);
+  border-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .user-dropdown-menu {
