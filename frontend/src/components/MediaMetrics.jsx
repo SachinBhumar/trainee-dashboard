@@ -153,9 +153,17 @@ const MediaMetrics = ({ data = {}, timeframe = 'Full year' }) => {
     { name: 'Referrals', value: 4 }
   ];
 
+  const campaignEfficiencyData = [
+    { channel: 'Search Ads', conversion: 4.8, ctr: 8.2 },
+    { channel: 'YouTube Video', conversion: 3.2, ctr: 5.5 },
+    { channel: 'Meta Ads', conversion: 2.9, ctr: 4.1 },
+    { channel: 'Display Ads', conversion: 1.8, ctr: 2.4 },
+    { channel: 'Affiliates', conversion: 2.1, ctr: 3.6 }
+  ];
+
   return (
     <div className="charts-wrapper">
-      {/* 2-Column Responsive Side-by-Side Charts Grid */}
+      {/* 2-Column Responsive Side-by-Side 2x2 Charts Grid */}
       <div className="charts-grid-2col">
         
         {/* Chart 1: Bar Graph - Asian Paints vs Birla Opus Paid Search */}
@@ -212,11 +220,8 @@ const MediaMetrics = ({ data = {}, timeframe = 'Full year' }) => {
           </div>
         </div>
 
-      </div>
-
-      {/* Chart 3: Area Graph - Website Monthly Traffic Trend */}
-      <div className="charts-grid-2col" style={{ marginTop: '1.25rem' }}>
-        <div className="chart-card" style={{ gridColumn: '1 / -1' }}>
+        {/* Chart 3: Area Graph - Website Monthly Traffic Trend (50% Grid Width) */}
+        <div className="chart-card">
           <div className="chart-header">
             <div>
               <span className="chart-subtitle">SimilarWeb Analytics</span>
@@ -224,7 +229,7 @@ const MediaMetrics = ({ data = {}, timeframe = 'Full year' }) => {
             </div>
           </div>
           <div className="chart-container-compact">
-            <ResponsiveContainer width="100%" height={240}>
+            <ResponsiveContainer width="100%" height={260}>
               <AreaChart data={filteredWebTraffic} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorTraffic" x1="0" y1="0" x2="0" y2="1">
@@ -241,6 +246,30 @@ const MediaMetrics = ({ data = {}, timeframe = 'Full year' }) => {
             </ResponsiveContainer>
           </div>
         </div>
+
+        {/* Chart 4: Bar Graph - Digital Campaign CTR & Conversion Rates (50% Grid Width) */}
+        <div className="chart-card">
+          <div className="chart-header">
+            <div>
+              <span className="chart-subtitle">Campaign Efficiency</span>
+              <h3>Digital Channel CTR & Conversion %</h3>
+            </div>
+          </div>
+          <div className="chart-container-compact">
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={campaignEfficiencyData} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <XAxis dataKey="channel" stroke="#64748b" fontSize={10} tickLine={false} />
+                <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} unit="%" />
+                <Tooltip formatter={(val) => [`${val}%`, '']} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '6px' }} />
+                <Bar name="CTR %" dataKey="ctr" fill="#a51526" radius={[4, 4, 0, 0]} />
+                <Bar name="Conversion %" dataKey="conversion" fill="#2563eb" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
       </div>
     </div>
   );
