@@ -13,7 +13,9 @@ import {
   Settings, 
   Calendar,
   Menu,
-  X 
+  X,
+  Upload,
+  UserPlus
 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -23,7 +25,9 @@ const Dashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('2026-05-01');
   const [selectedView, setSelectedView] = useState('YTD'); // 'YTD' | 'MoM'
   const [selectedTimeframe, setSelectedTimeframe] = useState('Full year'); // 'Full year' | 'H1...' | 'Q1...'
-  const [activeTab, setActiveTab] = useState('brand'); // 'brand' | 'media' | 'admin'
+  const [activeTab, setActiveTab] = useState('brand'); // 'brand' | 'media'
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const ytdKpiData = {
     brand: {
       share_of_search: { title: "Share of Search", value: "82.6%", subtext: "82.6% YTD Average", source: "Google Dashboard" },
@@ -212,12 +216,27 @@ const Dashboard = () => {
 
               <div className="dropdown-divider"></div>
 
-              <div className="dropdown-badge-row">
-                <span className="dropdown-label">Security</span>
-                <span className="confidential-badge">Confidential</span>
-              </div>
+              {user?.role === 'admin' && (
+                <>
+                  <button 
+                    className="dropdown-menu-item"
+                    onClick={() => { setShowUploadModal(true); setMenuOpen(false); }}
+                  >
+                    <Upload size={15} color="var(--primary)" />
+                    <span>Upload Excel Data</span>
+                  </button>
 
-              <div className="dropdown-divider"></div>
+                  <button 
+                    className="dropdown-menu-item"
+                    onClick={() => { setShowInviteModal(true); setMenuOpen(false); }}
+                  >
+                    <UserPlus size={15} color="var(--primary)" />
+                    <span>Invite Team Member</span>
+                  </button>
+
+                  <div className="dropdown-divider"></div>
+                </>
+              )}
 
               <button 
                 className="dropdown-logout-btn" 
@@ -251,70 +270,57 @@ const Dashboard = () => {
             >
               Media
             </button>
-            {user?.role === 'admin' && (
-              <button
-                className={`tab-btn ${activeTab === 'admin' ? 'active' : ''}`}
-                onClick={() => setActiveTab('admin')}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Settings size={14} />
-                  <span>Admin Panel</span>
-                </div>
-              </button>
-            )}
           </div>
 
-          {activeTab !== 'admin' && (
-            <div className="controls-group">
-              {/* YTD / MoM Toggle Button Group */}
-              <div className="toggle-group">
-                <button
-                  className={`toggle-btn ${selectedView === 'YTD' ? 'active' : ''}`}
-                  onClick={() => setSelectedView('YTD')}
-                >
-                  YTD
-                </button>
-                <button
-                  className={`toggle-btn ${selectedView === 'MoM' ? 'active' : ''}`}
-                  onClick={() => setSelectedView('MoM')}
-                >
-                  MoM
-                </button>
-              </div>
-
-              {/* Single Clean Timeframe Dropdown */}
-              <div className="unified-select-wrapper">
-                <Calendar size={15} className="select-calendar-icon" />
-                <select
-                  className="select-filter-unified"
-                  value={selectedTimeframe}
-                  onChange={(e) => setSelectedTimeframe(e.target.value)}
-                >
-                  <option value="Full year">Full Year</option>
-                  <option value="H1 Apr–Sep">H1 (Apr – Sep)</option>
-                  <option value="H2 Oct–Mar">H2 (Oct – Mar)</option>
-                  <option value="Q1">Q1 (Apr – Jun)</option>
-                  <option value="Q2">Q2 (Jul – Sep)</option>
-                  <option value="Q3">Q3 (Oct – Dec)</option>
-                  <option value="Q4">Q4 (Jan – Mar)</option>
-                </select>
-              </div>
-
-              {/* Export PPT */}
-              <button 
-                className="btn btn-primary"
-                onClick={handlePptDownload}
-                disabled={pptDownloading || !selectedPeriod}
+          <div className="controls-group">
+            {/* YTD / MoM Toggle Button Group */}
+            <div className="toggle-group">
+              <button
+                className={`toggle-btn ${selectedView === 'YTD' ? 'active' : ''}`}
+                onClick={() => setSelectedView('YTD')}
               >
-                <Download size={16} />
-                <span>{pptDownloading ? 'Exporting...' : 'Export PPT'}</span>
+                YTD
+              </button>
+              <button
+                className={`toggle-btn ${selectedView === 'MoM' ? 'active' : ''}`}
+                onClick={() => setSelectedView('MoM')}
+              >
+                MoM
               </button>
             </div>
-          )}
+
+            {/* Single Clean Timeframe Dropdown */}
+            <div className="unified-select-wrapper">
+              <Calendar size={15} className="select-calendar-icon" />
+              <select
+                className="select-filter-unified"
+                value={selectedTimeframe}
+                onChange={(e) => setSelectedTimeframe(e.target.value)}
+              >
+                <option value="Full year">Full Year</option>
+                <option value="H1 Apr–Sep">H1 (Apr – Sep)</option>
+                <option value="H2 Oct–Mar">H2 (Oct – Mar)</option>
+                <option value="Q1">Q1 (Apr – Jun)</option>
+                <option value="Q2">Q2 (Jul – Sep)</option>
+                <option value="Q3">Q3 (Oct – Dec)</option>
+                <option value="Q4">Q4 (Jan – Mar)</option>
+              </select>
+            </div>
+
+            {/* Export PPT */}
+            <button 
+              className="btn btn-primary"
+              onClick={handlePptDownload}
+              disabled={pptDownloading || !selectedPeriod}
+            >
+              <Download size={16} />
+              <span>{pptDownloading ? 'Exporting...' : 'Export PPT'}</span>
+            </button>
+          </div>
         </div>
 
         {/* Loading Spinner */}
-        {loading && activeTab !== 'admin' ? (
+        {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '300px' }}>
             <div style={{ 
               border: '4px solid var(--border-color)', 
@@ -334,24 +340,50 @@ const Dashboard = () => {
         ) : (
           <div>
             {/* KPI Cards Grid */}
-            {activeTab !== 'admin' && kpiData && (
+            {kpiData && (
               <KPICards kpis={activeTab === 'brand' ? kpiData.brand : kpiData.media} />
             )}
 
             {/* Main Tabs panels */}
             {activeTab === 'brand' && <BrandMetrics data={brandData} timeframe={selectedTimeframe} />}
             {activeTab === 'media' && <MediaMetrics data={mediaData} timeframe={selectedTimeframe} />}
-            
-            {activeTab === 'admin' && user?.role === 'admin' && (
-              <div className="admin-grid">
-                {/* Admin configuration cards */}
-                <AdminUpload onUploadSuccess={fetchPeriods} />
-                <AdminInvite />
-              </div>
-            )}
           </div>
         )}
       </main>
+
+      {/* Admin Upload Modal */}
+      {showUploadModal && (
+        <div className="modal-backdrop" onClick={() => setShowUploadModal(false)}>
+          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Upload Performance Data (Excel)</h3>
+              <button className="modal-close-btn" onClick={() => setShowUploadModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div className="modal-body">
+              <AdminUpload onUploadSuccess={() => { fetchPeriods(); setShowUploadModal(false); }} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Admin Invite Modal */}
+      {showInviteModal && (
+        <div className="modal-backdrop" onClick={() => setShowInviteModal(false)}>
+          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Invite Team Member / Admin</h3>
+              <button className="modal-close-btn" onClick={() => setShowInviteModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div className="modal-body">
+              <AdminInvite />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
