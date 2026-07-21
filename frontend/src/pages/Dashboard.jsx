@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import KPICards from '../components/KPICards';
@@ -11,7 +11,9 @@ import {
   LogOut, 
   User, 
   Settings, 
-  Calendar 
+  Calendar,
+  Menu,
+  X 
 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -27,6 +29,20 @@ const Dashboard = () => {
   const [mediaData, setMediaData] = useState(null);
   const [pptDownloading, setPptDownloading] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const menuRef = useRef(null);
+
+  // Close dropdown menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Fetch all available periods from Excel data
   const fetchPeriods = async () => {
@@ -100,7 +116,7 @@ const Dashboard = () => {
 
   return (
     <div className="app-container">
-      {/* Header bar (Double logo branding matching references) */}
+      {/* Header bar (Compact double logo branding matching references) */}
       <header className="app-header">
         <div className="brand-section">
           {/* Asian Paints Logo */}
@@ -126,20 +142,49 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="user-actions">
-          <div className="confidential-badge">Confidential</div>
-          <div className="user-badge">
-            <User size={14} color="var(--primary)" />
-            <span>{user?.email}</span>
-          </div>
-
+        {/* 3-Lines Hamburger Menu Button & Dropdown */}
+        <div className="header-menu-container" ref={menuRef}>
           <button 
-            className="btn btn-secondary btn-logout" 
-            onClick={logout}
+            className={`menu-toggle-btn ${menuOpen ? 'active' : ''}`}
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle user menu"
+            title="Account Menu"
           >
-            <LogOut size={16} />
-            <span>Sign Out</span>
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
+
+          {menuOpen && (
+            <div className="user-dropdown-menu">
+              <div className="dropdown-user-info">
+                <div className="dropdown-user-avatar">
+                  <User size={16} color="var(--primary)" />
+                </div>
+                <div className="dropdown-user-details">
+                  <span className="dropdown-user-email">{user?.email}</span>
+                  <span className="dropdown-user-role">
+                    {user?.role ? user.role.toUpperCase() : 'MEMBER'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="dropdown-divider"></div>
+
+              <div className="dropdown-badge-row">
+                <span className="dropdown-label">Security</span>
+                <span className="confidential-badge">Confidential</span>
+              </div>
+
+              <div className="dropdown-divider"></div>
+
+              <button 
+                className="dropdown-logout-btn" 
+                onClick={logout}
+              >
+                <LogOut size={16} />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
