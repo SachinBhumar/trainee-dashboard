@@ -192,53 +192,55 @@ def get_kpis(
 
     one_pd_val = aggregate_metric("1P Data Outreach", "last_text")
 
+    view_tag = " (YTD)" if view == "YTD" else " (MoM)"
+
     return {
         "brand": {
             "share_of_search": {
                 "value": f"{sos_val*100:.1f}%" if sos_val is not None else "82.0%",
-                "subtext": f"{sos_ytd_val} YTD Average" if view == "YTD" else "Period average",
+                "subtext": f"{sos_ytd_val} YTD Avg" if view == "YTD" else "Monthly Single Period",
                 "source": "Google Dashboard",
                 "title": "Share of Search"
             },
             "toma": {
                 "value": f"{toma_val*100:.1f}%" if toma_val is not None else "76.0%",
-                "subtext": toma_change,
+                "subtext": f"{toma_change}{view_tag}",
                 "source": "Kantar",
                 "title": "TOMA"
             },
             "consideration": {
                 "value": f"{cons_val*100:.1f}%" if cons_val is not None else "82.0%",
-                "subtext": cons_change,
+                "subtext": f"{cons_change}{view_tag}",
                 "source": "Kantar",
                 "title": "Consideration"
             },
             "mmr_reach": {
                 "value": f"{reach_val:.0f}Mn" if reach_val is not None else "711Mn",
-                "subtext": f"Period maximum ({reach_base or 869}Mn baseline)",
+                "subtext": f"Period max ({reach_base or 869}Mn base){view_tag}",
                 "source": "BARC + Madison Tool",
                 "title": "MMR Reach"
             },
             "tv_sov": {
                 "value": f"{tvsov_val*100:.1f}%" if tvsov_val is not None else "41.0%",
-                "subtext": tvsov_change,
+                "subtext": f"{tvsov_change}{view_tag}",
                 "source": "BARC",
                 "title": "TV SOV"
             },
             "digital_sov": {
                 "value": f"{digsov_val*100:.1f}%" if digsov_val is not None else "36.8%",
-                "subtext": "Period average",
+                "subtext": f"Period level{view_tag}",
                 "source": "Vtion",
                 "title": "Digital SOV"
             },
             "paid_search_sos": {
                 "value": f"{paidsos_val*100:.1f}%" if paidsos_val is not None else "93.5%",
-                "subtext": paidsos_change,
+                "subtext": f"{paidsos_change}{view_tag}",
                 "source": "SimilarWeb",
                 "title": "Paid Search SOS"
             },
             "ai_sos": {
                 "value": f"{aisos_val*100:.1f}%" if aisos_val is not None else "82.4%",
-                "subtext": aisos_change,
+                "subtext": f"{aisos_change}{view_tag}",
                 "source": "SimilarWeb",
                 "title": "AI SOS"
             }
@@ -246,37 +248,37 @@ def get_kpis(
         "media": {
             "all_platform_soe": {
                 "value": f"{all_media_val*100:.0f}%" if all_media_val is not None else "34%",
-                "subtext": all_media_change,
+                "subtext": f"{all_media_change}{view_tag}",
                 "source": "Madison Competes",
                 "title": "All Platform SOE"
             },
             "digital_soe_yt": {
                 "value": f"{yt_soe_val*100:.1f}%" if yt_soe_val is not None else "35.5%",
-                "subtext": "Period average",
+                "subtext": f"Period level{view_tag}",
                 "source": "Google Platforms",
                 "title": "Digital SOE (YT)"
             },
             "avg_frequency": {
                 "value": freq_val if freq_val is not None else "13-16x",
-                "subtext": "Period range",
+                "subtext": f"Period range{view_tag}",
                 "source": "MSpectra",
                 "title": "Avg Frequency"
             },
             "website_traffic": {
                 "value": f"{web_traffic_val/1000000:.1f}M" if web_traffic_val is not None else "41.7M",
-                "subtext": "Total visits in period",
+                "subtext": f"Total visits{view_tag}",
                 "source": "SimilarWeb",
                 "title": "Website Traffic"
             },
             "paid_search_traffic": {
                 "value": f"{ap_paid_val/1000000:.2f}Mn" if ap_paid_val is not None else "4.16Mn",
-                "subtext": paid_search_change,
+                "subtext": f"{paid_search_change}{view_tag}",
                 "source": "SimilarWeb",
                 "title": "Paid Search Traffic"
             },
             "one_pd_reach": {
                 "value": one_pd_val if one_pd_val is not None else "XXMn",
-                "subtext": "Activated audience",
+                "subtext": f"Activated audience{view_tag}",
                 "source": "CDP / CRM",
                 "title": "1PD Reach"
             }
