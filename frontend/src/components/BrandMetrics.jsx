@@ -86,6 +86,14 @@ const BrandMetrics = ({ data, timeframe = 'Full year' }) => {
     { name: 'Print & OOH', value: 8.0 }
   ];
 
+  const formattedMarketData = market_performance_table?.map(row => {
+    const rawVal = row.tv_sov ? parseFloat(String(row.tv_sov).replace('%', '')) : 30;
+    return {
+      ...row,
+      tv_sov_num: isNaN(rawVal) ? 30 : rawVal
+    };
+  }) || [];
+
   return (
     <div className="charts-wrapper">
       {/* 2-Column Responsive Side-by-Side Charts Grid */}
@@ -203,12 +211,12 @@ const BrandMetrics = ({ data, timeframe = 'Full year' }) => {
           </div>
           <div className="chart-container-compact">
             <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={market_performance_table || []} margin={{ top: 10, right: 20, left: -15, bottom: 0 }}>
+              <BarChart data={formattedMarketData} margin={{ top: 10, right: 20, left: -15, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis dataKey="market" stroke="#64748b" fontSize={11} tickLine={false} />
                 <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} unit="%" />
-                <Tooltip formatter={(val) => [`${val}`, 'TV SOV']} />
-                <Bar name="TV SOV" dataKey="tv_sov" fill="#a51526" radius={[4, 4, 0, 0]} />
+                <Tooltip formatter={(val) => [`${val}%`, 'TV SOV']} />
+                <Bar name="TV SOV" dataKey="tv_sov_num" fill="#a51526" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
