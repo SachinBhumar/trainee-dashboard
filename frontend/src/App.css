@@ -529,19 +529,48 @@
   color: var(--primary);
 }
 
-/* KPI Cards Layout */
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+/* Horizontally Scrollable KPI Cards Carousel */
+.kpi-carousel-wrapper {
+  position: relative;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.kpi-scroll-container {
+  display: flex;
   gap: 1rem;
-  margin-bottom: 2rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding: 4px 6px 12px 6px;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) rgba(0, 0, 0, 0.04);
+}
+
+/* Custom Scrollbar for Webkit browsers */
+.kpi-scroll-container::-webkit-scrollbar {
+  height: 5px;
+}
+
+.kpi-scroll-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+}
+
+.kpi-scroll-container::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
 }
 
 .kpi-card {
+  flex: 0 0 215px;
+  scroll-snap-align: start;
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 1.1rem 1.25rem;
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
   position: relative;
@@ -551,6 +580,42 @@
 .kpi-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+}
+
+.kpi-nav-btn {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  transition: var(--transition);
+  opacity: 0.9;
+}
+
+.kpi-nav-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  opacity: 1;
+  transform: translateY(-50%) scale(1.08);
+}
+
+.kpi-nav-btn.nav-left {
+  left: -12px;
+}
+
+.kpi-nav-btn.nav-right {
+  right: -12px;
 }
 
 /* Dynamic Left borders on cards */
