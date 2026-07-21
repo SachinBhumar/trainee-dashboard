@@ -30,42 +30,8 @@ const Dashboard = () => {
   const [pptDownloading, setPptDownloading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [periodFilterKey, setPeriodFilterKey] = useState('FULL_YEAR');
 
   const menuRef = useRef(null);
-
-  // Handle unified period dropdown selection (combines annual, half-yearly, quarterly, and monthly views)
-  const handlePeriodFilterChange = (key) => {
-    setPeriodFilterKey(key);
-    const latestPeriod = periods.length > 0 ? periods[periods.length - 1] : '';
-
-    if (key === 'FULL_YEAR') {
-      setSelectedTimeframe('Full year');
-      if (latestPeriod) setSelectedPeriod(latestPeriod);
-    } else if (key === 'H1') {
-      setSelectedTimeframe('H1 Apr–Sep');
-      if (latestPeriod) setSelectedPeriod(latestPeriod);
-    } else if (key === 'H2') {
-      setSelectedTimeframe('H2 Oct–Mar');
-      if (latestPeriod) setSelectedPeriod(latestPeriod);
-    } else if (key === 'Q1') {
-      setSelectedTimeframe('Q1');
-      if (latestPeriod) setSelectedPeriod(latestPeriod);
-    } else if (key === 'Q2') {
-      setSelectedTimeframe('Q2');
-      if (latestPeriod) setSelectedPeriod(latestPeriod);
-    } else if (key === 'Q3') {
-      setSelectedTimeframe('Q3');
-      if (latestPeriod) setSelectedPeriod(latestPeriod);
-    } else if (key === 'Q4') {
-      setSelectedTimeframe('Q4');
-      if (latestPeriod) setSelectedPeriod(latestPeriod);
-    } else if (key.startsWith('MONTH_')) {
-      const monthPeriod = key.replace('MONTH_', '');
-      setSelectedTimeframe('Full year');
-      setSelectedPeriod(monthPeriod);
-    }
-  };
 
   // Close dropdown menu when clicking outside
   useEffect(() => {
@@ -273,37 +239,21 @@ const Dashboard = () => {
                 </button>
               </div>
 
-              {/* Single Unified Time & Period Filter Dropdown */}
+              {/* Single Clean Timeframe Dropdown */}
               <div className="unified-select-wrapper">
                 <Calendar size={15} className="select-calendar-icon" />
                 <select
                   className="select-filter-unified"
-                  value={periodFilterKey}
-                  onChange={(e) => handlePeriodFilterChange(e.target.value)}
+                  value={selectedTimeframe}
+                  onChange={(e) => setSelectedTimeframe(e.target.value)}
                 >
-                  <optgroup label="Cumulative & Annual Overview">
-                    <option value="FULL_YEAR">Full Year (YTD Cumulative)</option>
-                    <option value="H1">H1 (Apr – Sep)</option>
-                    <option value="H2">H2 (Oct – Mar)</option>
-                    <option value="Q1">Q1 (Apr – Jun)</option>
-                    <option value="Q2">Q2 (Jul – Sep)</option>
-                    <option value="Q3">Q3 (Oct – Dec)</option>
-                    <option value="Q4">Q4 (Jan – Mar)</option>
-                  </optgroup>
-
-                  {periods.length > 0 && (
-                    <optgroup label="Specific Monthly Breakdowns">
-                      {periods.map((p) => {
-                        const dateObj = new Date(p);
-                        const monthLabel = dateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-                        return (
-                          <option key={p} value={`MONTH_${p}`}>
-                            {monthLabel}
-                          </option>
-                        );
-                      })}
-                    </optgroup>
-                  )}
+                  <option value="Full year">Full Year</option>
+                  <option value="H1 Apr–Sep">H1 (Apr – Sep)</option>
+                  <option value="H2 Oct–Mar">H2 (Oct – Mar)</option>
+                  <option value="Q1">Q1 (Apr – Jun)</option>
+                  <option value="Q2">Q2 (Jul – Sep)</option>
+                  <option value="Q3">Q3 (Oct – Dec)</option>
+                  <option value="Q4">Q4 (Jan – Mar)</option>
                 </select>
               </div>
 
