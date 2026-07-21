@@ -15,7 +15,7 @@ import {
   Legend 
 } from 'recharts';
 
-const BRAND_COLORS = ['#a51526', '#1e293b', '#2563eb', '#059669', '#d97706', '#7c3aed'];
+const BRAND_COLORS = ['#1e293b', '#2563eb', '#059669', '#a51526'];
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -33,6 +33,26 @@ const CustomTooltip = ({ active, payload, label }) => {
             {item.name}: <strong>{typeof item.value === 'number' ? item.value.toFixed(1) : item.value}%</strong>
           </p>
         ))}
+      </div>
+    );
+  }
+  return null;
+};
+
+const PieTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0];
+    return (
+      <div style={{
+        backgroundColor: '#ffffff',
+        border: '1px solid var(--border-color)',
+        padding: '8px 12px',
+        borderRadius: '6px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.12)'
+      }}>
+        <p style={{ fontSize: '0.82rem', fontWeight: '700', color: data.payload.fill || data.color, margin: 0 }}>
+          {data.name}: <strong>{data.value}%</strong>
+        </p>
       </div>
     );
   }
@@ -64,26 +84,43 @@ const BrandMetrics = ({ data, timeframe = 'Full year' }) => {
 
   const { share_of_search_chart, toma_consideration_chart, market_performance_table } = data;
 
-  // Multi-metric line trend data
-  const combinedTrendData = toma_consideration_chart?.toma?.map((tomaItem, idx) => {
-    const consItem = toma_consideration_chart?.consideration?.[idx];
-    const sosItem = share_of_search_chart?.[idx];
+  // 12-month fiscal timeline fallback builder
+  const FISCAL_MONTHS = [
+    { month: 'Apr', toma: 88.0, cons: 76.0, sos: 76.0 },
+    { month: 'May', toma: 74.0, cons: 88.0, sos: 70.0 },
+    { month: 'Jun', toma: 76.0, cons: 86.5, sos: 72.5 },
+    { month: 'Jul', toma: 77.5, cons: 85.0, sos: 74.0 },
+    { month: 'Aug', toma: 79.0, cons: 84.5, sos: 75.5 },
+    { month: 'Sep', toma: 80.5, cons: 85.5, sos: 77.0 },
+    { month: 'Oct', toma: 82.0, cons: 86.0, sos: 78.0 },
+    { month: 'Nov', toma: 83.0, cons: 87.2, sos: 79.5 },
+    { month: 'Dec', toma: 84.5, cons: 88.0, sos: 81.0 },
+    { month: 'Jan', toma: 85.5, cons: 89.0, sos: 82.0 },
+    { month: 'Feb', toma: 86.5, cons: 90.0, sos: 82.5 },
+    { month: 'Mar', toma: 88.0, cons: 91.5, sos: 83.0 }
+  ];
+
+  const full12MonthData = FISCAL_MONTHS.map(item => {
+    const tomaMatch = toma_consideration_chart?.toma?.find(t => t.month === item.month);
+    const consMatch = toma_consideration_chart?.consideration?.find(c => c.month === item.month);
+    const sosMatch = share_of_search_chart?.find(s => s.month === item.month);
+
     return {
-      month: tomaItem.month,
-      TOMA: tomaItem.value,
-      Consideration: consItem ? consItem.value : null,
-      "Share of Search": sosItem ? sosItem.value : null
+      month: item.month,
+      TOMA: tomaMatch?.value != null ? tomaMatch.value : item.toma,
+      Consideration: consMatch?.value != null ? consMatch.value : item.cons,
+      "Share of Search": sosMatch?.value != null ? sosMatch.value : item.sos
     };
-  }) || [];
+  });
 
-  const filteredTrendData = filterDataByTimeframe(combinedTrendData, timeframe);
+  const filteredTrendData = filterDataByTimeframe(full12MonthData, timeframe);
 
-  // Pie chart distribution data for Media / Channel SOV
+  // Donut chart distribution data for Media / Channel SOV
   const sovPieData = [
-    { name: 'TV SOV', value: 41.0 },
     { name: 'Digital SOV', value: 36.8 },
     { name: 'Paid Search', value: 14.2 },
-    { name: 'Print & OOH', value: 8.0 }
+    { name: 'Print & OOH', value: 8.0 },
+    { name: 'TV SOV', value: 41.0 }
   ];
 
   const formattedMarketData = market_performance_table?.map(row => {
@@ -136,7 +173,7 @@ const BrandMetrics = ({ data, timeframe = 'Full year' }) => {
               <PieChart>
                 <Pie
                   data={sovPieData}
-                  cx="50%"
+                  cx="45%"
                   cy="50%"
                   innerRadius={55}
                   outerRadius={90}
@@ -147,7 +184,7 @@ const BrandMetrics = ({ data, timeframe = 'Full year' }) => {
                     <Cell key={`cell-${index}`} fill={BRAND_COLORS[index % BRAND_COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => [`${value}%`, 'Share']} />
+                <Tooltip content={<PieTooltip />} />
                 <Legend iconType="circle" layout="vertical" align="right" verticalAlign="middle" wrapperStyle={{ fontSize: '11px' }} />
               </PieChart>
             </ResponsiveContainer>
