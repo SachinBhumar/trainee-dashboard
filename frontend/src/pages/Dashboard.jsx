@@ -69,8 +69,8 @@ const Dashboard = () => {
     try {
       const [kpisRes, brandRes, mediaRes] = await Promise.all([
         axios.get(`/api/dashboard/kpis?period=${selectedPeriod}&timeframe=${selectedTimeframe}&view=${selectedView}`),
-        axios.get(`/api/dashboard/brand-metrics?period=${selectedPeriod}`),
-        axios.get(`/api/dashboard/media-metrics?period=${selectedPeriod}`)
+        axios.get(`/api/dashboard/brand-metrics?period=${selectedPeriod}&timeframe=${selectedTimeframe}&view=${selectedView}`),
+        axios.get(`/api/dashboard/media-metrics?period=${selectedPeriod}&timeframe=${selectedTimeframe}&view=${selectedView}`)
       ]);
 
       setKpiData(kpisRes.data);

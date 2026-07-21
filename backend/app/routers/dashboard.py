@@ -58,19 +58,21 @@ def get_kpis(
     
     selected_tf_months = tf_months_map.get(timeframe, tf_months_map["Full year"])
     
-    if view == "YTD":
-        chrono_order = {4:0, 5:1, 6:2, 7:3, 8:4, 9:5, 10:6, 11:7, 12:8, 1:9, 2:10, 3:11}
-        # Find maximum chronological month that actually has data in valid_records and is in selected_tf_months
-        valid_months_in_db = {dt.month for r, dt in valid_records if r.value is not None or r.value_text is not None}
-        matching_months = [m for m in selected_tf_months if m in valid_months_in_db]
+    try:
+        selected_dt = datetime.datetime.strptime(period, "%Y-%m-%d")
+        selected_m = selected_dt.month
+    except ValueError:
+        selected_m = 5
         
-        if matching_months:
-            max_index = max(chrono_order[m] for m in matching_months)
-            target_months = [m for m, idx in chrono_order.items() if idx <= max_index]
-        else:
-            target_months = selected_tf_months
-    else:
-        target_months = selected_tf_months
+    chrono_order = {4:0, 5:1, 6:2, 7:3, 8:4, 9:5, 10:6, 11:7, 12:8, 1:9, 2:10, 3:11}
+
+    if view == "YTD":
+        selected_idx = chrono_order.get(selected_m, 0)
+        target_months = [m for m in selected_tf_months if chrono_order.get(m, 0) <= selected_idx]
+        if not target_months:
+            target_months = [selected_m]
+    else: # MoM (Month-on-Month: Single selected month metric view)
+        target_months = [selected_m]
         
     filtered_records = [(r, dt) for r, dt in valid_records if dt.month in target_months]
     
