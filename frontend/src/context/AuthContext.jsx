@@ -26,6 +26,9 @@ export const AuthProvider = ({ children }) => {
       axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
     }
     setLoading(false);
+
+    // Pre-warm the backend Render instance immediately when the app loads
+    axios.get('/api/dashboard/periods').catch(() => {});
   }, []);
 
   const login = async (email, password) => {

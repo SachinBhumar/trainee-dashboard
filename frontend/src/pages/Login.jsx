@@ -16,6 +16,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Instant client-side validation
+    if (!email || !email.includes('@')) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+    if (!password || password.length < 4) {
+      setError('Password must be at least 4 characters long.');
+      return;
+    }
+
     setLoading(true);
 
     const result = await login(email, password);
